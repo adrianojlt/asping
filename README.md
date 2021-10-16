@@ -1,4 +1,7 @@
 
+# Description
+Project description goes here
+
 # Migrations
 
 # Visual Studio
