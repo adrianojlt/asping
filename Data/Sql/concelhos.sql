@@ -1,0 +1,1 @@
+﻿insert into AspingDb.dbo.Concelho values (1, 'AGUEDA', 1);

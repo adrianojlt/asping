@@ -1,0 +1,1 @@
+﻿insert into AspingDb.dbo.Freguesia values (3, 'AGUADA DE CIMA')

@@ -1,6 +1,8 @@
 ﻿namespace asping.Data
 {
     using asping.Model;
+    using Asping.Model;
+    using Asping.Model.Predios;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
 
@@ -14,41 +16,67 @@
         public DbSet<Author> Authors { get; set; }
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<QuoteTag> QuoteTags { get; set; }
+
+        public DbSet<Predio> Predio { get; set; }
+        public DbSet<Freguesia> Freguesia { get; set; }
+        public DbSet<Concelho>  Concelho { get; set; }
+        public DbSet<Distrito>  Distrito { get; set; }
 
         // Fluent Api
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Quote>()
+            this.Relations(modelBuilder);
+            this.Seed(modelBuilder);
+        }
+
+        private void Relations(ModelBuilder mb)
+        {
+            mb.Entity<Quote>()
                 .HasOne(q => q.Author)
-                .WithMany(a => a.Quotes).HasForeignKey(q => q.AuthorId);
+                .WithMany(a => a.Quotes)
+                .HasForeignKey(q => q.AuthorId);
 
+            mb.Entity<QuoteTag>()
+                .HasKey(qt => new { qt.QuoteId, qt.TagId });
 
-            modelBuilder.Entity<Author>().HasData(new List<Author>()
+            mb.Entity<QuoteTag>()
+                .HasOne(qt => qt.Quote)
+                .WithMany(q => q.QuoteTags)
+                .HasForeignKey(qt => qt.QuoteId);
+
+            mb.Entity<QuoteTag>()
+                .HasOne(qt => qt.Tag)
+                .WithMany(t => t.QuoteTags)
+                .HasForeignKey(qt => qt.TagId);
+        }
+
+        public void Seed(ModelBuilder mb)
+        {
+            var generalTag = new Tag() { Id = 1, Name = "General", Description = "General Description" };
+
+            var lincoln = new Author() { Id = 2, Name = "Abraham Lincoln" };
+
+            mb.Entity<Author>().HasData(new List<Author>()
             {
                 new Author() { Id = 1, Name = "Albert Einstein" },
-                new Author() { Id = 2, Name = "Abraham Lincoln" }
+                lincoln
             });
 
-            modelBuilder.Entity<Tag>().HasData(new List<Tag>() 
-            { 
-               new Tag() { Id = 1, Name = "General", Description = "General Description" }
-            });
+            mb.Entity<Tag>().HasData(new List<Tag>() { generalTag }); 
 
-            modelBuilder.Entity<Quote>().HasData(new List<Quote>()
+            mb.Entity<Quote>().HasData(new List<Quote>()
             {
                 new Quote()
                 {
                     Id = 1,
+                    AuthorId = 2,
                     When = new System.DateTime(1838, 1, 1),
-                    Value = "America will never be destroyed from the outside",
-                    AuthorId = 2
+                    Value = "America will never be destroyed from the outside"
                 }
             });
 
-            modelBuilder.Entity("QuoteTag").HasData( 
-                new { QuotesId = 1, TagsId = 1 }  
-            );
+            mb.Entity<QuoteTag>().HasData(new QuoteTag() { QuoteId = 1, TagId = generalTag.Id });
         }
-
     }
 }

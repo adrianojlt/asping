@@ -23,20 +23,31 @@ namespace asping
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddMvc();
+
+            //
+            services.AddMvc( opt =>
+            {
+                // ... to be able to use UseMvc in Configure Method
+                opt.EnableEndpointRouting = false;
+
+                // Add Filters here ...
+                // opt.Filters.Add(null);
+
+            });
 
             //services.AddDbContext<QuotesDbContext>(c => c.UseInMemoryDatabase("Quotes")) >
 
             var connString = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddDbContext<AspingDbContext>(option => option.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=AspingDb"));
+            //services.AddDbContext<AspingDbContext>(opt => opt.use)
 
             services.AddSwaggerGen(s =>
             {
                 s.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = " Asping", Version = "v1" });
             });
 
-            //services.AddRazorPages();
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,8 +61,14 @@ namespace asping
             }
 
             //quotesDbContext.Database.EnsureCreated();
+            app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseMvc(routes => 
+            {
+                routes.MapRoute(name: "api", template: "api/{controller}/{action}/{id?}");
+            });
 
             app.UseEndpoints(endpoints =>
             {
@@ -64,7 +81,10 @@ namespace asping
 
                 // ... the previous could also be written like this
                 // endpoints.MapDefaultControllerRoute();
+
+                endpoints.MapRazorPages();
             });
+
         }
     }
 }

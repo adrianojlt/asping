@@ -7,38 +7,60 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using asping.Data;
 
-namespace asping.Migrations
+namespace Asping.Migrations
 {
     [DbContext(typeof(AspingDbContext))]
-    [Migration("20210828201723_QuotesTag")]
-    partial class QuotesTag
+    [Migration("20211227234553_First")]
+    partial class First
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.5")
+                .HasAnnotation("ProductVersion", "5.0.13")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Asping.Model.QuoteTag", b =>
+                {
+                    b.Property<int>("QuoteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("QuoteId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("QuoteTags");
+
+                    b.HasData(
+                        new
+                        {
+                            QuoteId = 1,
+                            TagId = 1
+                        });
+                });
 
             modelBuilder.Entity("QuoteTag", b =>
                 {
-                    b.Property<int>("QuotesId")
+                    b.Property<int>("QuotesQuoteId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TagsId")
+                    b.Property<int>("TagsTagId")
                         .HasColumnType("int");
 
-                    b.HasKey("QuotesId", "TagsId");
+                    b.HasKey("QuotesQuoteId", "TagsTagId");
 
-                    b.HasIndex("TagsId");
+                    b.HasIndex("TagsTagId");
 
                     b.ToTable("QuoteTag");
                 });
 
             modelBuilder.Entity("asping.Model.Author", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("AuthorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -52,26 +74,26 @@ namespace asping.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("AuthorId");
 
                     b.ToTable("Authors");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            AuthorId = 1,
                             Name = "Albert Einstein"
                         },
                         new
                         {
-                            Id = 2,
+                            AuthorId = 2,
                             Name = "Abraham Lincoln"
                         });
                 });
 
             modelBuilder.Entity("asping.Model.Quote", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("QuoteId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -89,7 +111,7 @@ namespace asping.Migrations
                     b.Property<DateTime>("When")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.HasKey("QuoteId");
 
                     b.HasIndex("AuthorId");
 
@@ -98,9 +120,9 @@ namespace asping.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            QuoteId = 1,
                             AuthorId = 2,
-                            CreatedAt = new DateTime(2021, 8, 28, 21, 17, 22, 813, DateTimeKind.Local).AddTicks(5814),
+                            CreatedAt = new DateTime(2021, 12, 27, 23, 45, 52, 781, DateTimeKind.Local).AddTicks(2350),
                             Value = "America will never be destroyed from the outside",
                             When = new DateTime(1838, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
@@ -108,7 +130,7 @@ namespace asping.Migrations
 
             modelBuilder.Entity("asping.Model.Tag", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("TagId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -119,22 +141,49 @@ namespace asping.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("TagId");
 
                     b.ToTable("Tags");
+
+                    b.HasData(
+                        new
+                        {
+                            TagId = 1,
+                            Description = "General Description",
+                            Name = "General"
+                        });
+                });
+
+            modelBuilder.Entity("Asping.Model.QuoteTag", b =>
+                {
+                    b.HasOne("asping.Model.Quote", "Quote")
+                        .WithMany("QuoteTags")
+                        .HasForeignKey("QuoteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("asping.Model.Tag", "Tag")
+                        .WithMany("QuoteTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Quote");
+
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("QuoteTag", b =>
                 {
                     b.HasOne("asping.Model.Quote", null)
                         .WithMany()
-                        .HasForeignKey("QuotesId")
+                        .HasForeignKey("QuotesQuoteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("asping.Model.Tag", null)
                         .WithMany()
-                        .HasForeignKey("TagsId")
+                        .HasForeignKey("TagsTagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -151,6 +200,16 @@ namespace asping.Migrations
             modelBuilder.Entity("asping.Model.Author", b =>
                 {
                     b.Navigation("Quotes");
+                });
+
+            modelBuilder.Entity("asping.Model.Quote", b =>
+                {
+                    b.Navigation("QuoteTags");
+                });
+
+            modelBuilder.Entity("asping.Model.Tag", b =>
+                {
+                    b.Navigation("QuoteTags");
                 });
 #pragma warning restore 612, 618
         }

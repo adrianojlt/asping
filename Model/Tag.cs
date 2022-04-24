@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-
-namespace asping.Model
+﻿namespace asping.Model
 {
+    using Asping.Model;
+    using System.Collections.Generic;
+
     public class Tag
     {
         public Tag()
@@ -15,6 +16,8 @@ namespace asping.Model
 
         public string Description { get; set; }
 
-        public List<Quote> Quotes { get; set; }
+        public ICollection<Quote> Quotes { get; set; }
+
+        public List<QuoteTag> QuoteTags { get; set; }
     }
 }

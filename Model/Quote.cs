@@ -1,5 +1,6 @@
 ﻿namespace asping.Model
 {
+    using Asping.Model;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -25,6 +26,8 @@
 
         public Author Author { get; set; }
 
-        public List<Tag> Tags { get; set; }
+        public ICollection<Tag> Tags { get; set; }
+
+        public List<QuoteTag> QuoteTags { get; set; }
     }
 }

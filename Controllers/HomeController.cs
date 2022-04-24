@@ -2,12 +2,22 @@
 {
     using Microsoft.AspNetCore.Mvc;
 
-    public class HomeController : ControllerBase
+    public class HomeController : Controller
     {
 
         public IActionResult Index()
         {
-            return base.Content("<html><h1>Index</h1></html>", "text/html");
+            return View();
+        }
+
+        public ActionResult MyView()
+        {
+            return View();
+        }
+
+        public IActionResult About()
+        {
+            return base.Content("<html><h1>About</h1></html>", "text/html");
         }
 
         public IActionResult Hello()

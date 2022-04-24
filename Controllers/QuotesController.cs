@@ -33,6 +33,15 @@
             return Ok(quote);
         }
 
+        [HttpGet]
+        [Route("tags")]
+        public IActionResult GetTags()
+        {
+            var tags = this.dbContext.Tags;
+
+            return Ok(tags);
+        }
+
         [HttpPost]
         public IActionResult Create(int authorId, [FromBody] Quote quote)
         {
