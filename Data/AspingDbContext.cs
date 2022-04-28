@@ -1,8 +1,7 @@
-﻿namespace asping.Data
+﻿namespace Asping.Data
 {
-    using asping.Model;
-    using Asping.Model;
-    using Asping.Model.Predios;
+    using Asping.Model.Quotes;
+    using Asping.Model.Locals;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
 

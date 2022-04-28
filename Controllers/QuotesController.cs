@@ -1,7 +1,7 @@
-﻿namespace asping.Controllers
+﻿namespace Asping.Controllers
 {
-    using asping.Data;
-    using asping.Model;
+    using Asping.Data;
+    using Asping.Model.Quotes;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
 

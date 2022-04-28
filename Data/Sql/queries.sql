@@ -1,5 +1,10 @@
-﻿  select * from AspingDb.dbo.Predio;
-  select * from [AspingDb].[dbo].[Freguesia];
-  select * from AspingDb.dbo.Freguesia;
-  select * from AspingDb.dbo.Concelho;
-  select * from AspingDb.dbo.Distrito;
+﻿  use AspingDb;
+
+  SET IDENTITY_INSERT AspingDb.dbo.Distrito ON;
+  
+  select * from dbo.Predio;
+  select * from dbo.Distrito;
+  select * from dbo.Concelho;
+  select * from dbo.Freguesia;
+  
+  

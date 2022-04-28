@@ -1,4 +1,4 @@
-﻿namespace Asping.Model.Predios
+﻿namespace Asping.Model.Locals
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
