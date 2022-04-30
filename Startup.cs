@@ -1,4 +1,4 @@
-using asping.Data;
+using Asping.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace asping
+namespace Asping
 {
     public class Startup
     {
@@ -22,9 +22,11 @@ namespace asping
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson(x =>
+                {
+                    x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                });
 
-            //
             services.AddMvc( opt =>
             {
                 // ... to be able to use UseMvc in Configure Method
@@ -51,7 +53,7 @@ namespace asping
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AspingDbContext quotesDbContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AspingDbContext quotesDbCofalsentext)
         {
             if (env.IsDevelopment())
             {
@@ -61,6 +63,8 @@ namespace asping
             }
 
             //quotesDbContext.Database.EnsureCreated();
+
+            // Provide static files from wwwroot
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -77,7 +81,9 @@ namespace asping
                     await context.Response.WriteAsync("About me info!!!");
                 });
 
-                endpoints.MapControllerRoute( name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute( 
+                    name: "default", 
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
 
                 // ... the previous could also be written like this
                 // endpoints.MapDefaultControllerRoute();

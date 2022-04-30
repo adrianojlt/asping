@@ -27,12 +27,12 @@
         }
 
         [HttpGet]
-        [Route("distrito/{id?}")]
-        public IActionResult GetDistritos(int id)
+        [Route("distritos")]
+        public IActionResult GetDistritos()
         {
-            this.dbContext.Distrito.FindAsync(id);
+            var result = this.dbContext.Distrito.ToList();
 
-            return Ok();
+            return Ok(result);
         }
 
         [HttpGet]

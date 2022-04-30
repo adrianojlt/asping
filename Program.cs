@@ -1,4 +1,4 @@
-namespace asping
+namespace Asping
 {
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;

@@ -9,7 +9,7 @@ Project description goes here
 Add-Migration [migration_name]
 Remove-Migration [migration_name]
 
-# update the database with the news migrations
+# Create/Update or Delete(drop) the database with the new created migrations
 Update-Database
 Drop-Database
 ###
