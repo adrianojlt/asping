@@ -1,6 +1,6 @@
 ﻿namespace Asping.Data
 {
-    public class QuotesConfiguration
+    public class QuoteConfiguration
     {
     }
 }
