@@ -1,4 +1,5 @@
 using Asping.Data;
+using Asping.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -48,6 +49,8 @@ namespace Asping
             {
                 s.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = " Asping", Version = "v1" });
             });
+
+            services.AddScoped<IQuotesService, QuotesService>();
 
             services.AddRazorPages();
         }

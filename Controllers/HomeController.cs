@@ -1,9 +1,18 @@
 ﻿namespace Asping.Controllers
 {
+    using Asping.Data;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
 
     public class HomeController : Controller
     {
+        private AspingDbContext dbContext;
+
+        public HomeController(AspingDbContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -23,5 +32,15 @@
         {
             return Ok("Helllloooooo Uncle Leo!!!");
         }
+
+        public IActionResult Predios()
+        {
+            var predios = dbContext.Predio.Include(c => c.Freguesia.Concelho.Distrito);
+
+
+
+            return Ok();
+        }
+
     }
 }
