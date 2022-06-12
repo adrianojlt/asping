@@ -2,7 +2,8 @@
 {
     using Asping.Data;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
+    using System.Net.Http;
+    using System.Threading.Tasks;
 
     public class HomeController : Controller
     {
@@ -35,12 +36,29 @@
 
         public IActionResult Predios()
         {
-            var predios = dbContext.Predio.Include(c => c.Freguesia.Concelho.Distrito);
-
-
-
             return Ok();
         }
 
+        public IActionResult Error()
+        {
+            return StatusCode(500, "custom 500 error!!!");
+        }
+
+        public async Task<IActionResult> Temp()
+        {
+            var client = new HttpClient();
+
+            var host = HttpContext.Request.Host.ToUriComponent();
+
+            var pathBase = HttpContext.Request.PathBase.ToUriComponent();
+
+            var url = $"{HttpContext.Request.Scheme}://{host}{pathBase}";
+
+            var result = await client.GetAsync($"{url}/Home/Error");
+
+            var message = await result.Content.ReadAsStringAsync();
+
+            return base.Content($"<html><body>Status Code: {result.StatusCode}; Response Message: {message}</body></html>", "text/html");
+        }
     }
 }
