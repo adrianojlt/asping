@@ -35,6 +35,11 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\" />
+    <Folder Include="Views\Templates\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Phis\Pages\Simple\index.cshtml" />
   </ItemGroup>
 
 </Project>
