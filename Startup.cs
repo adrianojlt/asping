@@ -3,6 +3,7 @@ using Asping.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,6 +54,12 @@ namespace Asping
             services.AddScoped<IQuotesService, QuotesService>();
 
             services.AddRazorPages();
+
+            // In Prod the React files will be served from this directory
+            services.AddSpaStaticFiles(config => 
+            { 
+                config.RootPath = "ClientApp/build"; 
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,6 +76,9 @@ namespace Asping
 
             // Provide static files from wwwroot
             app.UseStaticFiles();
+
+            // For React files (must be after UseStaticFiles)
+            app.UseSpaStaticFiles();
 
             app.UseRouting();
 
@@ -94,6 +104,16 @@ namespace Asping
                 endpoints.MapRazorPages();
             });
 
+            // Must be after UseEndpoints, otherwise React will take over routing and MVC routes wont work
+            app.UseSpa(config => 
+            {
+                config.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    config.UseReactDevelopmentServer(npmScript: "start");
+                }
+            });
         }
     }
 }
