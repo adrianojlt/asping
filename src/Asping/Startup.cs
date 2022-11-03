@@ -93,7 +93,6 @@ namespace Asping
 
                 endpoints.MapRazorPages();
             });
-
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿SET IDENTITY_INSERT AspingDb.dbo.Distrito on;
+﻿SET IDENTITY_INSERT AspingDb.dbo.Concelho on;
 
 insert into Concelho (Id,Nome,DistritoId) values (1, 'AGUEDA', 1);
 insert into Concelho (Id,Nome,DistritoId) values (2, 'ALBERGARIA-A-VELHA', 1);
