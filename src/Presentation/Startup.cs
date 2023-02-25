@@ -43,12 +43,13 @@ public class Startup
 
         });
 
-        //services.AddDbContext<QuotesDbContext>(c => c.UseInMemoryDatabase("Quotes")) >
-
-        var connString = Configuration.GetConnectionString("DefaultConnection");
 
         //services.AddDatabaseContext(Configuration);
+
+        // ... choose here a real DB or in Memory one.
+        var connString = Configuration.GetConnectionString("DefaultConnection");
         services.AddDbContext(connString);
+        //services.AddDbContext<AspingDbContext>(c => c.UseInMemoryDatabase("Quotes"));
 
         services.AddSwaggerGen(s =>
         {
