@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 
 public class QuotesService : IQuotesService
 {
-
     private AspingDbContext dbContext; 
 
     public QuotesService(AspingDbContext dbContext)

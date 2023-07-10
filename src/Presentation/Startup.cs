@@ -12,6 +12,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Infrastructure;
 using HotChocolate.Types;
+using System.IO;
+using Microsoft.AspNetCore.Routing;
+using Presentation.Transformers;
 
 namespace Presentation;
 
@@ -43,7 +46,6 @@ public class Startup
 
         });
 
-
         //services.AddDatabaseContext(Configuration);
 
         // ... choose here a real DB or in Memory one.
@@ -59,6 +61,8 @@ public class Startup
         services.AddScoped<IQuotesService, QuotesService>();
 
         services.AddRazorPages();
+
+        services.AddSingleton<ExampleTransformer>();
 
         services.AddGraphQLServer()
             .AddQueryType(q => q.Name(OperationTypeNames.Query))
@@ -82,6 +86,11 @@ public class Startup
 
         //quotesDbContext.Database.EnsureCreated();
 
+
+        // Defaults index.html in wwwroot folder.
+        // Must be here before UseStaticFiles statment
+        app.UseDefaultFiles();
+
         // Provide static files from wwwroot
         app.UseStaticFiles();
 
@@ -96,7 +105,7 @@ public class Startup
         {
             endpoints.MapGet("/about", async context =>
             {
-                await context.Response.WriteAsync("About me info!!!");
+                await context.Response.WriteAsync("About Asping info!!!");
             });
 
             endpoints.MapControllerRoute( 
@@ -109,6 +118,8 @@ public class Startup
             endpoints.MapRazorPages();
 
             endpoints.MapGraphQL();
+
+            endpoints.MapDynamicControllerRoute<ExampleTransformer>("example/{controller}");
         });
     }
 }

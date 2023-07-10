@@ -45,4 +45,12 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\adriano.leite\src\github\asping\src\Presentation\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\adriano.leite\src\github\asping\src\Presentation\.editorconfig" />
+  </ItemGroup>
+
 </Project>

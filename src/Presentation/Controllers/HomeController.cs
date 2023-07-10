@@ -2,6 +2,8 @@
 {
     using Infrastructure.Data;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Routing;
+    using Microsoft.AspNetCore.Routing;
     using System.Net.Http;
     using System.Threading.Tasks;
 
@@ -9,9 +11,16 @@
     {
         private AspingDbContext dbContext;
 
-        public HomeController(AspingDbContext dbContext)
+        private readonly IUrlHelperFactory urlHelperFactory;
+
+        private readonly IEndpointRouteBuilder endpointRouteBuilder;
+
+        public HomeController(
+            AspingDbContext dbContext, 
+            IUrlHelperFactory urlHelperFactory)
         {
             this.dbContext = dbContext;
+            this.urlHelperFactory = urlHelperFactory;
         }
 
         public IActionResult Index()
@@ -20,6 +29,11 @@
         }
 
         public ActionResult MyView()
+        {
+            return View();
+        }
+
+        public ActionResult Routing()
         {
             return View();
         }
@@ -38,6 +52,17 @@
         {
             return Ok();
         }
+
+        public IActionResult AddRoute(string route, string name) 
+        {
+            // add routes to db here ...
+            return Ok();
+        }
+
+        public IActionResult ProcessRoute() 
+        { 
+            return Ok("Route Processed!!!!"); 
+        }  
 
         public IActionResult Error()
         {

@@ -10,7 +10,7 @@
 
         public static IEnumerable<string> Exactly(this IEnumerable<string> names, int nameLength)
         {
-            return ExtractStrings(names?.ToArray(), name => name.Length == nameLength);
+            return ExtractStrings(names.ToArray(), name => name.Length == nameLength);
         }
 
         public static IEnumerable<string> LessThan(this IEnumerable<string> names, int nameLength)
@@ -52,8 +52,6 @@
             {
                 return result;
             }
-            
-            
 
             foreach (string name in names)
             {
