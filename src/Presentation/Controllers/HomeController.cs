@@ -62,7 +62,14 @@
         public IActionResult ProcessRoute() 
         { 
             return Ok("Route Processed!!!!"); 
-        }  
+        }
+
+        public IActionResult Dynamic() 
+        {
+            var request = this.HttpContext.Request;
+
+            return Redirect("https://www.google.com");
+        }
 
         public IActionResult Error()
         {

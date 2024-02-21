@@ -15,6 +15,8 @@ using HotChocolate.Types;
 using System.IO;
 using Microsoft.AspNetCore.Routing;
 using Presentation.Transformers;
+using Presentation.Middlewares;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace Presentation;
 
@@ -86,6 +88,7 @@ public class Startup
 
         //quotesDbContext.Database.EnsureCreated();
 
+        app.UseRewriter(new RewriteOptions().Add(new ExampleRule()));
 
         // Defaults index.html in wwwroot folder.
         // Must be here before UseStaticFiles statment
@@ -93,6 +96,9 @@ public class Startup
 
         // Provide static files from wwwroot
         app.UseStaticFiles();
+
+        app.UseMiddleware<ExampleMiddleware>();
+        app.UseMiddleware<RedirectMiddleware>();
 
         app.UseRouting();
 

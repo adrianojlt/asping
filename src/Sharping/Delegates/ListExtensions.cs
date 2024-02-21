@@ -10,7 +10,7 @@
 
         public static IEnumerable<string> Exactly(this IEnumerable<string> names, int nameLength)
         {
-            return ExtractStrings(names.ToArray(), name => name.Length == nameLength);
+            return ExtractStrings(names?.ToArray(), name => name.Length == nameLength);
         }
 
         public static IEnumerable<string> LessThan(this IEnumerable<string> names, int nameLength)
@@ -20,19 +20,22 @@
 
         public static IEnumerable<string> MoreThan(this IEnumerable<string> names, int nameLength)
         {
-            return ExtractStringsFunc(names.ToArray(), name => name.Length > nameLength);
+            // in the second argument we are using a delegate instead of a lambda expression
+            // this is just to show that we can use both
+            // both represent executable code blocks that can be passed around, stored, and invoked
+            return ExtractStringsFunc(names.ToArray(), delegate (string name) { return name.Length > nameLength; });
         }
 
-        private static IEnumerable<string> ExtractStrings(string[] names, Filter filter)
+        private static IEnumerable<string> ExtractStrings(string[]? names, Filter filter)
         {
-            List<string> result = Enumerable.Empty<string>().ToList();
+            var result = Enumerable.Empty<string>().ToList();
 
             if (names == null || !names.Any())
             {
                 return result;
             }
 
-            foreach (string name in names)
+            foreach (var name in names)
             {
                 if (filter(name))
                 {
@@ -44,16 +47,16 @@
         }
 
         // The same as above but without the need to declare the "private delegate bool Filter"
-        private static IEnumerable<string> ExtractStringsFunc(string[] names, Func<string, bool> filter)
+        private static IEnumerable<string> ExtractStringsFunc(string[]? names, Func<string, bool> filter)
         {
-            List<string> result = Enumerable.Empty<string>().ToList();
+            var result = Enumerable.Empty<string>().ToList();
 
             if (names == null || !names.Any())
             {
                 return result;
             }
 
-            foreach (string name in names)
+            foreach (var name in names)
             {
                 if (filter(name))
                 {

@@ -11,6 +11,7 @@
                     await writer.WriteAsync(str);
                     await writer.FlushAsync();
                 }
+
                 return stream.ToArray();
             }
         }

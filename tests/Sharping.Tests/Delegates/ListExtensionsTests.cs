@@ -14,6 +14,7 @@ public class ListExtensionsTests
     {
         // Assert
         int result = names.MoreThan(nameLength).Count();
+        
 
         // Result
         Assert.Equal(result, expected);
