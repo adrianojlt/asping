@@ -52,8 +52,8 @@ public class Startup
 
         // ... choose here a real DB or in Memory one.
         var connString = Configuration.GetConnectionString("DefaultConnection");
-        services.AddDbContext(connString);
-        //services.AddDbContext<AspingDbContext>(c => c.UseInMemoryDatabase("Quotes"));
+        //services.AddDbContext(connString);
+        services.AddDbContext<AspingDbContext>(c => c.UseInMemoryDatabase("Quotes"));
 
         services.AddSwaggerGen(s =>
         {
@@ -75,7 +75,7 @@ public class Startup
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AspingDbContext quotesDbCofalsentext)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AspingDbContext aspingDbContext)
     {
         if (env.IsDevelopment())
         {
@@ -84,9 +84,9 @@ public class Startup
             app.UseSwaggerUI(s => s.SwaggerEndpoint("/swagger/v1/swagger.json", "Asping Api v1"));
         }
 
-        app.SeedData(Configuration);
+        //app.SeedData(Configuration);
 
-        //quotesDbContext.Database.EnsureCreated();
+        aspingDbContext.Database.EnsureCreated();
 
         app.UseRewriter(new RewriteOptions().Add(new ExampleRule()));
 
@@ -99,9 +99,10 @@ public class Startup
 
         app.UseMiddleware<ExampleMiddleware>();
         app.UseMiddleware<RedirectMiddleware>();
+        app.UseMiddleware<CustomHeaderMiddleware>();
 
+        // configures the middleware to enable routing
         app.UseRouting();
-
         app.UseMvc(routes => 
         {
             routes.MapRoute(name: "api", template: "api/{controller}/{action}/{id?}");
