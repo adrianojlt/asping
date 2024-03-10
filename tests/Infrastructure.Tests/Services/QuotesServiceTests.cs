@@ -49,11 +49,11 @@
         }
 
         [Fact]
-        public async void GetQuotesFromTag_ExistingTag_ShoudReturnValidQuotes()
+        public void GetQuotesFromTag_ExistingTag_ShoudReturnValidQuotes()
         {
             var tagId = 1;
 
-            var quotes = await service.GetQuotesFromTagId(tagId);
+            var quotes = service.GetQuotesFromTagId(tagId);
 
             var quoteIds = SeedQuotes.QuotesTags
                 .Where(qt => qt.TagId == tagId)

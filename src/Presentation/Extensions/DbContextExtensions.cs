@@ -14,7 +14,8 @@ public static class DbContextExtensions
         services.AddDbContext<AspingDbContext>(options =>
         {
             //options.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=AspingDb", x => { x.MigrationsAssembly("Presentation"); });
-            options.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=AspingDb");
+            //options.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=AspingDb");
+            options.UseInMemoryDatabase("Quotes");
         });
     }
 

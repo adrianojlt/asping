@@ -22,14 +22,20 @@ public class AspingDbContext : DbContext
     public virtual DbSet<Concelho>?  Concelho { get; set; }
     public virtual DbSet<Distrito>?  Distrito { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+    }
+
     // Fluent Api
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        this.Relations(modelBuilder);
+        //this.QuoteRelations(modelBuilder);
+        this.QuoteRelationsEF5(modelBuilder);
         this.Seed(modelBuilder);
     }
 
-    private void Relations(ModelBuilder mb)
+    private void QuoteRelations(ModelBuilder mb)
     {
         // We only need to specify these Primary Keys,
         // in the others class models the Id fields are PK by convention
@@ -49,6 +55,32 @@ public class AspingDbContext : DbContext
             .HasOne(qt => qt.Tag)
             .WithMany(t => t.QuoteTags)
             .HasForeignKey(qt => qt.TagId);
+    }
+
+    /*
+     * Entity Framework Core doesn’t natively support many-to-many relationships 
+     * without a join entity until version 5.0.
+     * This code only works on EF 5.0+
+     */
+    private void QuoteRelationsEF5(ModelBuilder mb) 
+    {
+        mb.Entity<Quote>()
+            .HasMany(q => q.Tags)
+            .WithMany(t => t.Quotes)
+            .UsingEntity<QuoteTag>(
+                j => j
+                    .HasOne(qt => qt.Tag)
+                    .WithMany(t => t.QuoteTags)
+                    .HasForeignKey(qt => qt.TagId),
+                j => j
+                    .HasOne(qt => qt.Quote)
+                    .WithMany(q => q.QuoteTags)
+                    .HasForeignKey(qt => qt.QuoteId),
+                j =>
+                {
+                    j.Property(qt => qt.QuoteId).IsRequired();
+                    j.Property(qt => qt.TagId).IsRequired();
+                });
     }
 
     public void Seed(ModelBuilder mb)

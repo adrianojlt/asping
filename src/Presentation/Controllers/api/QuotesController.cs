@@ -5,6 +5,7 @@
     using Infrastructure.Services;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -15,10 +16,12 @@
     public class QuotesController : ControllerBase
     {
         private IQuotesService quotesService;
+        private AspingDbContext dbContext; 
 
-        public QuotesController(IQuotesService quotesService)
+        public QuotesController(IQuotesService quotesService, AspingDbContext dbContext)
         {
             this.quotesService = quotesService;
+            this.dbContext = dbContext;
         }
 
         // GET /api/quotes/authors
@@ -137,6 +140,43 @@
             var savedQuote = await this.quotesService.CreateQuote(quote);
 
             return CreatedAtAction("Quote", new { authorId = authorId, id = savedQuote.Id }, savedQuote);
+        }
+
+        // GET /api/quotes/author/{id}
+        [HttpGet]
+        [Route("author/{id}")]
+        public IActionResult GetQuotesByAuthor(int id) 
+        {
+            var quotes = dbContext.Quotes
+                .Include(a => a.Author)
+                .Include(t => t.Tags)
+                .Where(w => w.AuthorId == id);
+
+            var result = quotes.Select(p => new 
+            { 
+                id = p.Id,
+                value = p.Value,
+                author = new 
+                { 
+                    name = p.Author.Name
+                },
+                tags = p.Tags.Select(t => new { t.Id, t.Name })
+            });
+
+            return Ok(result.ToList());
+        }
+
+        // GET /api/quotes/temp
+        [HttpGet]
+        [Route("temp")]
+        public IActionResult Temp() 
+        {
+            var quotes = dbContext.Quotes.AsQueryable();
+
+
+            var result = dbContext.Entry(quotes);
+            
+            return Ok(result);
         }
     }
 }

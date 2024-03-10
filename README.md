@@ -1,7 +1,25 @@
 ## Asping
-Project description goes here
-## Migrations
-Migrations can be dealt in two ways
+This project aims to be a repository with .NET Core content and practices done be me.  
+
+.NET Core key concepts:
+- **Routing**: Route a request to whenever you desire. 
+- **Middleware** - Useful to change HTTP requests and responses. It allows developers to add custom logic to the request pipeline.
+- Action Filters
+- [Entity Framework](#migrations-with-entity-framework)
+- Razor Pages
+- Blazer
+- Package Management
+- Deployment
+- **CLI**: Command Line Interface is a  Cross platform toolchain for developing, building, running and publishing .NET apps.
+- Dependency Injection
+- Authentication and Authorization
+- Logging
+- Background Tasks
+- CI/CD - From a merge to master to a new working version available in live.
+
+
+## Migrations with Entity Framework
+Migrations can be handled in two ways
 ### Visual Studio
 Add or Remove code with migrations to be used by update-database command:
 ```

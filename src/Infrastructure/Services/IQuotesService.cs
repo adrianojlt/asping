@@ -22,7 +22,7 @@ public interface IQuotesService
 
     public Task<ICollection<Quote>> GetQuoteByAuthorId(int authorId);
 
-    public Task<ICollection<Quote>> GetQuotesFromTagId(int TagId);
+    public ICollection<Quote> GetQuotesFromTagId(int TagId);
 
     public Task<Quote> CreateQuote(Quote quote);
 }
