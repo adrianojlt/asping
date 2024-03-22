@@ -24,7 +24,7 @@
             this.dbContext = dbContext;
         }
 
-        // GET /api/quotes/authors
+        // api/quotes/authors
         [HttpGet]
         [Route("authors")]
         public IActionResult GetAuthors() 
@@ -34,22 +34,29 @@
                 return BadRequest("Author has invalid data");
             }
 
-            var authors = this.quotesService.GetAllAuthors();
+            var result = dbContext.Authors
+                .Include(q => q.Quotes)
+                .Select(s => new 
+                { 
+                    id = s.Id,
+                    name = s.Name,
+                    numberOfQuotes = s.Quotes.Count()
+                }).ToList();
 
-            return Ok(authors);
+            return Ok(result);
         }
 
-        // POST /api/quotes/authors
+        // api/quotes/authors
         [HttpPost]
         [Route("author")]
-        public async Task<ActionResult<Author>> CreateAuthor(Author autor)
+        public async Task<ActionResult<Author>> CreateAuthor(Author author)
         {
-            var created = await this.quotesService.CreateAuthor(autor);
+            var created = await this.quotesService.CreateAuthor(author);
 
             return Ok(created);
         }
 
-        // DEL /api/quotes/author
+        // api/quotes/author
         [HttpDelete]
         [Route("author/{authorId?}")]
         public async Task<ActionResult<Author>> DeleteAuthors(int authorId)
@@ -73,7 +80,7 @@
             }
         }
 
-        // GET /api/quotes
+        // api/quotes
         [HttpGet]
         public IActionResult Get()
         {
@@ -82,7 +89,7 @@
             return Ok(quotes);
         }
 
-        // GET /api/quotes/3
+        // api/quotes/3
         [HttpGet]
         [Route("{id?}")]
         public async Task<IActionResult> Get(int id)
@@ -92,12 +99,19 @@
             return Ok(quote);
         }
 
-        // GET /api/quotes/tags
+        // api/quotes/tags
         [HttpGet]
         [Route("tags")]
         public IActionResult GetTags()
         {
-            var tags = this.quotesService.GetAllTags();
+            var tags = this.quotesService
+                .GetAllTags()
+                .Select(t => new 
+                { 
+                    id = t.Id,
+                    name = t.Name,
+                    description = t.Description,
+                });
 
             return Ok(tags);
         }
@@ -142,7 +156,7 @@
             return CreatedAtAction("Quote", new { authorId = authorId, id = savedQuote.Id }, savedQuote);
         }
 
-        // GET /api/quotes/author/{id}
+        // api/quotes/author/{id}
         [HttpGet]
         [Route("author/{id}")]
         public IActionResult GetQuotesByAuthor(int id) 
@@ -166,7 +180,7 @@
             return Ok(result.ToList());
         }
 
-        // GET /api/quotes/temp
+        // api/quotes/temp
         [HttpGet]
         [Route("temp")]
         public IActionResult Temp() 
