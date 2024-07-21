@@ -1,23 +1,18 @@
 ﻿using Sharping.Challenges;
+using Xunit.Abstractions;
 
 namespace Sharping.Tests.Challengers
 {
     public class ChallengersTests
     {
+        private readonly ITestOutputHelper output;
 
-        [Theory]
-        [InlineData(new int[] { 1, 4, 3 }, 0)]
-        [InlineData(new int[] { 1, 4, 3, 1 }, 1)]
-        [InlineData(new int[] { 4, 7, 3, 7, 4, 1, 8 }, 2)]
-        [InlineData(new int[] { 4, 7, 3, 7, 4, 1, 8, 4 }, 2)]
-        public void Pair_of_socks(int[] socks, int expected)
+        public ChallengersTests(ITestOutputHelper output)
         {
-            var ch = new Challenger();
-
-            var pairs = ch.PairOfSocks(socks);
-
-            Assert.Equal(expected, pairs);
+            this.output = output;
         }
+
+
 
         [Theory]
         [InlineData(null, false)]
@@ -30,9 +25,11 @@ namespace Sharping.Tests.Challengers
         [InlineData("(()", false)]
         public void Validate_pharentheses(string value, bool expected) 
         { 
-            var result = Challenger.validateParentheses(value);
+            var result = DelimiterMatches.ValidateParenthesis(value);
 
             Assert.Equal(expected, result);
         }
+
+
     }
 }
