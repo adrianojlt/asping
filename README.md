@@ -1,5 +1,5 @@
 ## Asping
-This project aims to be a repository with .NET Core content and practices done be me.  
+This project aims to be a repository with .NET Core content and practices.  
 
 .NET Core key concepts:
 - **Routing**: Route a request to whenever you desire. 
@@ -18,7 +18,7 @@ This project aims to be a repository with .NET Core content and practices done b
 - CI/CD - From a merge to master to a new working version available in live.
 
 
-## Migrations with Entity Framework
+## Entity Framework Migrations
 Migrations can be handled in two ways
 ### Visual Studio
 Add or Remove code with migrations to be used by update-database command:
